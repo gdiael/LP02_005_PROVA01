@@ -246,9 +246,8 @@ public class Tree {
     }
 
     public void itePreOrder(){
-        if(this.isEmpty()){
-            return;
-        }
+        if(this.isEmpty()) return;
+
         String saida = "";
         Stack<Node> pilha = new Stack<Node>();
         pilha.push(this.root);
