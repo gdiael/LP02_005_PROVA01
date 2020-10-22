@@ -2,14 +2,14 @@
 // Implemente uma estrutura de dados para representar uma ávore em que cada nó pode possuir até n filhos.
 //
 // ESTRATÉGIA PARA RESOLUÇÃO
-// Foi reutilizado o código da questão 02 para implementação da arvore binária de busca.
-// Nesse código foram adicionados dois métodos, um método privado [Boolean isBinarySearch(Node no)]
-// que verifica se o nó está obedecendo a estrutura de arvore binária de busca, ou seja, se o valor
-// em seu filho da esquerda é menor e se o valor em seu filho da direita é maior, este método é
-// recursivo e é chamado em seus filhos, até que seja encontrado um nó folha.
-// E o segundo método é um método público que retorna verdadeiro caso a arvore inteira atenda estes requisitos
-// para isso ele chama o método privado e passa o nó raiz como argumento.
-// O método main foi alterado para testar essa funcionalidade.
+// Foi reutilizado o código da questão 02 para implementação da arvore binária de busca, porém
+// a classe Node, que representa os nós da árvore, foi modificado removendo as propriedades dos nós
+// a direita e a esquerda e criado um vetor de nós, representando os nós filhos, e uma propriedade chamada
+// size para controlar a quantidade de nós filhos que foram inseridos.
+// Todos os outros métodos da arvore foram adaptados para essa nova situação.
+// A árvore possue vários métodos, sendo que o utilizado na método main para a demonstração da arvore é o de
+// adicionar novos valores na árvore, este método percorre a árvore por nível, procurando um nó que tenha
+// espaço para mais filhos, e adiciona um novo nó, com o valor a ser adicionado como filho do nó encontrado.
 
 
 import java.util.Queue;
@@ -54,16 +54,19 @@ public class nTree {
             return this.size == 0;
         }
     
-        // imprime este nó e seus filhos
+        // imprime este nó e seus filhos recursivamente
         public String toString(){
-            String val = this.value.toString() + "(";
-            for(int i = 0; i < this.size; i++){
-                Node child = this.childs[i];
-                if(child != null){
-                    val += child.toString();
+            String val = this.value.toString();
+            if(this.hasChild()){
+                val += ">(";
+                for(int i = 0; i < this.size; i++){
+                    Node child = this.childs[i];
+                    if(child != null){
+                        val += child.toString() + ((i < this.size-1) ? " " : "");
+                    }
                 }
+                val += ")";
             }
-            val += ")";
             return val;
         }
     }
