@@ -24,19 +24,19 @@ public class nTree {
         // valor contido no nó (atualmente inteiro)
         public Integer value;
         // referência ao nós filhos
-        public Node[] childs;
+        public Node[] children;
         // quantidade de filhos
         public int size;
     
         // construtor
         public Node(Integer value, int nSize){
             this.value = value;
-            this.childs = new Node[nSize];
+            this.children = new Node[nSize];
             this.size = 0;
         }
         
         public int capacity(){
-            return this.childs.length;
+            return this.children.length;
         }
 
         // verifica se tem filhos
@@ -60,12 +60,31 @@ public class nTree {
             if(this.hasChild()){
                 val += ">(";
                 for(int i = 0; i < this.size; i++){
-                    Node child = this.childs[i];
+                    Node child = this.children[i];
                     if(child != null){
                         val += child.toString() + ((i < this.size-1) ? " " : "");
                     }
                 }
                 val += ")";
+            }
+            return val;
+        }
+
+        public String subTreeString(String prefix){
+            String val = this.value.toString();
+            if(this.isLeaf()) return val + "\n";
+            String valSpace = "";
+            for(int i = 0; i < val.length(); i++){
+                valSpace += " ";
+            }
+            String arrowIni = (this.size == 1) ? " \u2500\u2500> " : " \u252C\u2500> ";
+            String arrowMid = " \u251C\u2500> ";
+            String arrowEnd = " \u2514\u2500> ";
+            for(int i = this.size-1; i > -1; i--){
+                Node child = this.children[i];
+                String arrow = (i == this.size-1) ? arrowIni : ((i == 0) ? arrowEnd : arrowMid);
+                String afast = (i == 0) ? "     " : " \u2502   ";
+                val += ((i == this.size-1) ? "" : prefix + valSpace) + arrow + child.subTreeString(prefix + valSpace + afast);
             }
             return val;
         }
@@ -99,7 +118,7 @@ public class nTree {
             Node first = fila.poll();
             if(first.value.equals(value)) return first;
             for(int i = 0; i < first.size; i++){
-                Node child = first.childs[i];
+                Node child = first.children[i];
                 fila.offer(child);
             }
         }
@@ -121,12 +140,12 @@ public class nTree {
             while(!fila.isEmpty()){
                 Node first = fila.poll();
                 if(!first.isFull()){
-                    first.childs[first.size] = new Node(value, this.nSize);
+                    first.children[first.size] = new Node(value, this.nSize);
                     first.size += 1;
                     return true;
                 }
                 for(int i = 0; i < first.size; i++){
-                    Node child = first.childs[i];
+                    Node child = first.children[i];
                     fila.offer(child);
                 }
             }
@@ -140,7 +159,7 @@ public class nTree {
 		} else {
             int nHeight = 1;
             for(int i = 0; i < no.size; i++){
-                nHeight = Math.max(nHeight, this.height(no.childs[i]));
+                nHeight = Math.max(nHeight, this.height(no.children[i]));
             }
             return nHeight;
 		}
@@ -156,7 +175,7 @@ public class nTree {
 		} else {
             int nSize = 1;
             for(int i = 0; i < no.size; i++){
-                nSize += this.size(no.childs[i]);
+                nSize += this.size(no.children[i]);
             }
             return nSize;
 		}
@@ -173,7 +192,7 @@ public class nTree {
         } else {
             int nLeaf = 0;
             for(int i = 0; i < no.size; i++){
-                nLeaf += numberOfLeafs(no.childs[i]);
+                nLeaf += numberOfLeafs(no.children[i]);
             }
             return nLeaf;
         }
@@ -192,7 +211,7 @@ public class nTree {
             String dVal = no.value.toString() + " ";
             System.out.print(dVal);
             for(int i = 0; i < no.size; i++){
-                preOrder(no.childs[i]);
+                preOrder(no.children[i]);
             }
 		}
     }
@@ -201,7 +220,7 @@ public class nTree {
         if(no != null){
             String dVal = no.value.toString() + " ";
             for(int i = 0; i < no.size; i++){
-                posOrder(no.childs[i]);
+                posOrder(no.children[i]);
             }
             System.out.print(dVal);
 		}
@@ -227,7 +246,7 @@ public class nTree {
             Node first = fila.poll();
             saida += first.value.toString() + " ";
             for(int i = 0; i < first.size; i++){
-                fila.offer(first.childs[i]);
+                fila.offer(first.children[i]);
             }
         }
         System.out.println(saida);
@@ -235,6 +254,6 @@ public class nTree {
 
     public String toString(){
         if(this.isEmpty()) return "Esta arvore eh vazia!";
-        return root.toString();
+        return root.subTreeString("");
     }
 }
