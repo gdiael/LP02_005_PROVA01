@@ -10,6 +10,10 @@
 // E o segundo método é um método público que retorna verdadeiro caso a arvore inteira atenda estes requisitos
 // para isso ele chama o método privado e passa o nó raiz como argumento.
 // O método main foi alterado para testar essa funcionalidade.
+// 
+// a impressão da arvore segue o esquema
+//  valor ┬─> [direita ]
+//        └─> [esquerda]
 
 
 import java.util.Queue;
@@ -65,6 +69,18 @@ public class Tree {
             String dStr = (this.hasRight() ? " " + this.right.toString() : "");
             return val + "(" + eStr + "," + dStr + ")";
         }
+
+        public String subTreeString(String prefix){
+            String val = this.value.toString();
+            if(this.isLeaf()) return val + "\n";
+            String valSpace = "";
+            for(int i = 0; i < val.length(); i++){
+                valSpace += " ";
+            }
+            String dStr = " \u252C\u2500> " + (this.hasRight() ? this.right.subTreeString(prefix + valSpace + " \u2502   "): "*\n");
+            String eStr = prefix + valSpace + " \u2514\u2500> " + (this.hasLeft() ? this.left.subTreeString(prefix + valSpace + "     ") : "*\n");
+            return val + dStr + eStr;
+        }
     }
 
     public Tree(){
@@ -80,10 +96,9 @@ public class Tree {
         for(int i : vec3){
             arv3.add(i);
         }
-        System.out.println("Imprimindo a arvore 3 que foi preenchida com valores de modo a ter altura minima");
+        System.out.println("Imprimindo a arvore que foi preenchida com valores de modo a ter altura minima");
         System.out.println(arv3);
         System.out.println("Arvore de busca? " + arv3.isBinarySearch().toString());
-        System.out.println("");
     }
 
     private Node getNode(Node no, Integer value){
@@ -266,6 +281,6 @@ public class Tree {
 
     public String toString(){
         if(this.isEmpty()) return "Esta arvore eh vazia!";
-        return root.toString();
+        return root.subTreeString("");
     }
 }
