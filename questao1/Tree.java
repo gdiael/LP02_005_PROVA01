@@ -233,14 +233,6 @@ public class Tree {
         return this.size(this.root);
     }
 
-    // public Boolean isFull(){
-    //     return false;
-    // }
-
-    // public Boolean isComplete(){
-    //     return false;
-    // }
-
     public Boolean isEmpty(){
         return (this.size() == 0);
     }
